@@ -1,0 +1,43 @@
+server:
+  port: ${PORT:1114}
+  context-path: /${spring.application.name}
+eureka:
+  instance:
+    hostname: ${HOST_NAME}
+    nonSecurePort: 80
+    instanceId: ${spring.application.name}:${server.port}:${random.value}
+    preferIpAddress: false
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+    statusPageUrlPath: ${server.context-path}/info
+    healthCheckUrlPath: ${server.context-path}/health
+    homePageUrlPath: ${server.context-path}
+    metadata-map:
+      management.context-path: ${server.context-path}
+  cloud:
+    bus:
+      enabled: true
+    stream:
+      kafka:
+        binder:
+          brokers: ${KAFKA_URL:localhost}:9092
+          zkNodes: ${KAFKA_URL:localhost}:2181
+turbine:
+  appConfig: yuewen-server-book
+  cluster-name-expression: "default"
+  combine-host-port: true
+management:  
+  security:  
+    enabled: false
+logging:
+  file: logs/${spring.application.name}.log
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework: ERROR
+    org.hibernate: ERROR
+    com.yuewen: DEBUG
+
+    
+from: git
